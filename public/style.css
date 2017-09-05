@@ -7,42 +7,51 @@ h1 {
 .breathVertical {
     margin-top:5px;
     margin-bottom:5px;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 10px;
+    padding-right: 100px;
 }
 
 
 .breathHorizontal {
     margin-left:5px;
     margin-right:5px;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 10px;
+    padding-right: 100px;
 }
 
 div.todoStatusACTIVE {
 
     color : blue;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 10px;
+    padding-right: 100px;
 }
 
 
 div.todoStatusCOMPLETE{
     color : green;
     text-decoration : line-through;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 10px;
+    padding-right: 100px;
 }
 
 div.todoStatusDELETED {
     color : red;
     text-decoration : line-through;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
 
 }
 
 hr {
-    border-width : 5px ;
+    border-width : 2.5px ;
     color : red;
 }
+
+.item
+{
+    width : 60%;
+    display: inline-block;
+}
+
+
+

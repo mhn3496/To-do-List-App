@@ -39,31 +39,101 @@ function addElements(todos_data_json){
 
 function createTodoElement(id, todo_object)
 {
-    var todo_element = document.createElement("div");
-    todo_element.innerText = todo_object.title;
-    // HW: Read custom data-* attributes
-    todo_element.setAttribute(
-        "data-id", id
-    );
 
-    todo_element.setAttribute(
-        "class", "todoStatus"+ todo_object.status + " " + "breathVertical"
-    );
+    var item = document.createElement("div");
+    item.setAttribute("class", "item");
+    var component = document.createElement("span");
+    component.setAttribute("class", "component");
 
+    if(todo_object.status == "ACTIVE")
+    {
+        var active = document.createElement("input");
+        active.setAttribute("type", "checkbox");
+        active.setAttribute('class','complete');
+        active.setAttribute("onclick", 'CompleteAJAX(' + id + ')');
+        active.setAttribute("id", 'del' + id);
+        component.appendChild(active);
+    }
 
-    if (todo_object.status == "ACTIVE"){
-
-        var complete_button = document.createElement("button");
-        complete_button.innerText = "Mark as Complete";
-        complete_button.setAttribute("onclick", "completeTodoAJAX("+id+")");
-        complete_button.setAttribute("class", "breathHorizontal");
-        todo_element.appendChild(complete_button);
+    if (todo_object.status == 'COMPLETE')
+    {
+        var complete = document.createElement("input");
+        complete.setAttribute("type", "checkbox");
+        complete.setAttribute('checked','true');
+        complete.setAttribute('disabled','disabled');
+        component.appendChild(complete);
 
     }
 
 
-    return todo_element;
+    var todo = document.createElement("span");
+    todo.innerText = todo_object.title;
+    todo.setAttribute("class","item todostatus"+todo_object.status);
+    component.appendChild(todo);
+    component.setAttribute(
+        "data-id", id
+    );
+
+    component.setAttribute(
+        "class", "todoStatus"+ todo_object.status + " " + "breathVertical"
+    );
+    component.setAttribute(
+        "class", "todoStatus"+ todo_object.status + " " + "breathHorizontal"
+    );
+
+    item.appendChild(component);
+
+
+    if(todo_object.status != "DELETED")
+    {
+        var del =document.createElement("input");
+
+        del.setAttribute("type", "image");
+        del.setAttribute("src",'./images/delete.JPG');
+        del.setAttribute("height", "10px");
+        del.setAttribute("width", "10px");
+        del.setAttribute("onClick", "DeleteAJAX("+id+")");
+        item.appendChild(del);
+    }
+    return item;
 }
+
+
+function addTodosAJAX()
+{
+    var title = document.getElementById(NEW_TODO_INPUT_ID).value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/todos", true);
+
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    var data = "todo_title="+ encodeURI(title);
+
+
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState == RESPONSE_DONE)
+        {
+
+            if(xhr.status == STATUS_OK)
+            {
+
+                addElements(xhr.responseText);
+            }
+            else
+            {
+
+                console.log(xhr.responseText);
+            }
+        }
+    }
+
+
+
+    xhr.send(data);
+
+}
+
 
 function getTodosAJAX() {
     //AJAX - xml HTTP request object
@@ -81,4 +151,46 @@ function getTodosAJAX() {
     xhr.send(data = null);
 }
 
+function completeTodoAJAX(id)
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open("PUT", "/api/todos/"+id, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    data = "todo_status=COMPLETE";
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState === RESPONSE_DONE)
+        {
+            if(xhr.status === STATUS_OK)
+            {
+                console.log(xhr.responseText);
+                addElements(xhr.responseText);
+            }
+        }
+    }
+
+    xhr.send(data);
+}
+
+
+function deleteTodoAJAX(id)
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", "/api/todos/"+id, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    data = "todo_status=DELETED";
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState === RESPONSE_DONE)
+        {
+            if(xhr.status === STATUS_OK)
+            {
+                console.log(xhr.responseText);
+                addElements(TODOS_LIST_ID,xhr.responseText);
+            }
+        }
+    }
+
+    xhr.send(data);
+}
 

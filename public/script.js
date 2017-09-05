@@ -59,6 +59,8 @@ function createTodoElement(id, todo_object)
     return todo_element;
 }
 
+
+
 function getTodosAJAX()
 {
     //AJAX - xml HTTP request object
