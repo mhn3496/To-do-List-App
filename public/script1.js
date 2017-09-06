@@ -6,6 +6,9 @@ const TODOS_LIST_COMPLETE = "todos_list_complete";
 const TODOS_LIST_DELETED = "todos_list_deleted";
 const NEW_TODO_INPUT_ID = "new_todo_input_id";
 
+var hideCompleted = true;
+var hideDeleted = true;
+
 window.onload = getTodosAJAX();
 function addElements(todos_data_json){
     var todos = JSON.parse(todos_data_json);
@@ -16,6 +19,7 @@ function addElements(todos_data_json){
     parentA.innerHTML = "";
     parentC.innerHTML = "";
     parentD.innerHTML = "";
+
     if(parentA || parentC || parentD)
     {
         Object.keys(todos).forEach(
@@ -23,9 +27,9 @@ function addElements(todos_data_json){
                var todo_element = createTodoElement(key, todos[key]);
                if(todos[key].status == "ACTIVE")
                     parentA.appendChild(todo_element);
-                if(todos[key].status == "COMPLETE")
+                if(todos[key].status == "COMPLETE" && hideCompleted == true )
                     parentC.appendChild(todo_element);
-                if(todos[key].status == "DELETED")
+                if(todos[key].status == "DELETED" && hideDeleted == true)
                     parentD.appendChild(todo_element);
 
 
@@ -44,18 +48,21 @@ function createTodoElement(id, todo_object)
     item.setAttribute("class", "item");
     var component = document.createElement("span");
     component.setAttribute("class", "component");
+    item.setAttribute(
+        "class", "todoStatus"+ todo_object.status + " " + "breathVertical"
+    );
 
     if(todo_object.status == "ACTIVE")
     {
-        var active = document.createElement("input");
-        active.setAttribute("type", "checkbox");
-        active.setAttribute('class','complete');
-        active.setAttribute("onclick", 'CompleteAJAX(' + id + ')');
-        active.setAttribute("id", 'del' + id);
-        component.appendChild(active);
+        var complete = document.createElement("input");
+        complete.setAttribute("type", "checkbox");
+        complete.setAttribute('class','complete');
+        complete.setAttribute("onclick", 'completeAJAX(' + id + ')');
+        complete.setAttribute("id", 'del' + id);
+        component.appendChild(complete);
     }
 
-    if (todo_object.status == 'COMPLETE')
+    if (todo_object.status == 'COMPLETE' )
     {
         var complete = document.createElement("input");
         complete.setAttribute("type", "checkbox");
@@ -68,6 +75,7 @@ function createTodoElement(id, todo_object)
 
     var todo = document.createElement("span");
     todo.innerText = todo_object.title;
+    todo.setAttribute("id",id);
     todo.setAttribute("class","item todostatus"+todo_object.status);
     component.appendChild(todo);
     component.setAttribute(
@@ -92,7 +100,7 @@ function createTodoElement(id, todo_object)
         del.setAttribute("src",'./images/delete.JPG');
         del.setAttribute("height", "10px");
         del.setAttribute("width", "10px");
-        del.setAttribute("onClick", "DeleteAJAX("+id+")");
+        del.setAttribute("onClick", "deleteAJAX("+id+")");
         item.appendChild(del);
     }
     return item;
@@ -151,7 +159,7 @@ function getTodosAJAX() {
     xhr.send(data = null);
 }
 
-function completeTodoAJAX(id)
+function completeAJAX(id)
 {
     var xhr = new XMLHttpRequest();
     xhr.open("PUT", "/api/todos/"+id, true);
@@ -173,7 +181,7 @@ function completeTodoAJAX(id)
 }
 
 
-function deleteTodoAJAX(id)
+function deleteAJAX(id)
 {
     var xhr = new XMLHttpRequest();
     xhr.open("DELETE", "/api/todos/"+id, true);
@@ -186,7 +194,7 @@ function deleteTodoAJAX(id)
             if(xhr.status === STATUS_OK)
             {
                 console.log(xhr.responseText);
-                addElements(TODOS_LIST_ID,xhr.responseText);
+                addElements(xhr.responseText);
             }
         }
     }
@@ -194,3 +202,14 @@ function deleteTodoAJAX(id)
     xhr.send(data);
 }
 
+function hideCompletedTodos()
+{
+    hideCompleted = !hideCompleted;
+    getTodosAJAX();
+}
+
+function hideDeletedTodos()
+{
+    hideDeleted = !hideDeleted;
+    getTodosAJAX();
+}

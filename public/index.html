@@ -11,21 +11,29 @@
 <h1 align = "center"> My todo List</h1>
 
 
-
+<h4 class = "headers"> Active Todos</h4>
 <div id = "todos_list_active">
 
 </div>
 <hr >
-<input type = "text" id = "new_todo_input_id" placeholder="Todo title goes here"/>
+<input padding-left = "40px" type = "text" id = "new_todo_input_id" placeholder="Todo title goes here"/>
 
 <button value = "Get Todos" onClick = "addTodosAJAX()">Add</button><br>
 <hr >
+<div>
+    <h4 class = "headers"> Completed Todos
+        <button class = "hide" onClick = hideCompletedTodos()>Hide/Unhide Completed Todos</button>
+    </h4>
 
+</div>
 <div id = "todos_list_complete"></div>
+
 <hr >
+<h4 class = "headers"> Deleted Todos
+    <button class = "hide" onClick = hideDeletedTodos()>Hide/Unhide Deleted Todos</button>
+</h4>
 
 <div id = "todos_list_deleted"></div>
-
 
 
 
