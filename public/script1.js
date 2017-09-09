@@ -46,7 +46,8 @@ function createTodoElement(id, todo_object)
 
     var item = document.createElement("div");
     item.setAttribute("class", "item");
-    var component = document.createElement("span");
+    var component = document.createElement("div");
+    component.setAttribute("width", "100px");
     component.setAttribute("class", "component");
     item.setAttribute(
         "class", "todoStatus"+ todo_object.status + " " + "breathVertical"
@@ -77,19 +78,22 @@ function createTodoElement(id, todo_object)
     todo.innerText = todo_object.title;
     todo.setAttribute("id",id);
     todo.setAttribute("class","item todostatus"+todo_object.status);
+
     component.appendChild(todo);
     component.setAttribute(
         "data-id", id
     );
 
-    component.setAttribute(
+   /* component.setAttribute(
         "class", "todoStatus"+ todo_object.status + " " + "breathVertical"
     );
     component.setAttribute(
         "class", "todoStatus"+ todo_object.status + " " + "breathHorizontal"
-    );
+    );*/
 
     item.appendChild(component);
+
+
 
 
     if(todo_object.status != "DELETED")
