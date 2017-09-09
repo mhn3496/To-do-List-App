@@ -77,7 +77,7 @@ function createTodoElement(id, todo_object)
     var todo = document.createElement("span");
     todo.innerText = todo_object.title;
     todo.setAttribute("id",id);
-    todo.setAttribute("class","item todostatus"+todo_object.status);
+    todo.setAttribute("class","item todoStatus"+todo_object.status);
 
     component.appendChild(todo);
     component.setAttribute(
